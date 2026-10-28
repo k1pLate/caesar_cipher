@@ -64,10 +64,43 @@ public class MainApp {
     }
 
     private void encryptFile() throws CipherException {
-        // TODO спросить исходный файл, файл для результата и ключ
-        //  проверить их через validator, прочитать текст через fileManager,
-        //  зашифровать через cipher и записать результат
-        System.out.println("Режим пока не реализован");
+        /// Запрашиваем исходный файл, файл для результата и ключ
+        /// проверяем их через validator, читаем текст через fileManager,
+        /// зашифровываем через cipher и записываем результат
+
+        String inputFile;
+        String outputFile;
+        int key;
+
+        while (true) {
+            System.out.print("Путь к исходному файлу: ");
+            inputFile = scanner.nextLine();
+            if (validator.isFileExists(inputFile)) {
+                break;
+            } else {
+                System.out.println("Неверный путь!");
+            }
+        }
+
+        System.out.print("Путь к файлу для результата: ");
+        outputFile = scanner.nextLine();
+
+        while (true) {
+            System.out.print("Ключ шифрования: ");
+            try {
+                key = Integer.parseInt(scanner.nextLine());
+                if (validator.isValidKey(key, ALPHABET)) {
+                    break;
+                } else {
+                    System.out.println("Неверный ключ! Ключ должен быть от 1 до " + (ALPHABET.length - 1));
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ключ должен быть ЧИСЛОМ от 1 до " + (ALPHABET.length - 1));
+            }
+        }
+
+        String inputText = fileManager.readFile(inputFile);
+        fileManager.writeFile(cipher.encrypt(inputText, key), outputFile);
     }
 
     private void decryptFile() throws CipherException {
