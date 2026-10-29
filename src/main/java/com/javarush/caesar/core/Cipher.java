@@ -1,16 +1,11 @@
 package com.javarush.caesar.core;
 
-import com.javarush.caesar.exception.CipherException;
-import com.javarush.caesar.service.FileManager;
-
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class Cipher {
 
     private final char[] alphabet;
     private final int[] indexes;
-    private Scanner scanner;
 
     public Cipher(char[] alphabet) {
         this.alphabet = alphabet;
@@ -78,9 +73,32 @@ public class Cipher {
         return result.toString();
     }
 
-    public String decrypt(String encryptedText, int shift) throws CipherException {
-        // TODO сдвинуть каждый символ на shift позиций назад по кругу
-        //  символ, которого нет в алфавите, - ошибка: бросаем CipherException
-        throw new UnsupportedOperationException("Метод decrypt пока не написан");
+    public String decrypt(String encryptedText, int shift) {
+        /// Сдвигаем каждый символ на shift позиций назад по кругу
+        /// символ, которого нет в алфавите, - оставляем как есть
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < encryptedText.length(); i++) {
+            char c = encryptedText.charAt(i);
+            if (Character.isUpperCase(encryptedText.charAt(i))) {
+                c = Character.toLowerCase(c);
+            }
+
+            int index = indexes[c];
+
+            if (index == -1) {
+                result.append(encryptedText.charAt(i));
+            } else {
+                int newIndex = (index - shift + alphabet.length) % alphabet.length;
+                if (Character.isUpperCase(encryptedText.charAt(i))) {
+                    result.append(Character.toUpperCase(alphabet[newIndex]));
+                } else {
+                    result.append(alphabet[newIndex]);
+                }
+            }
+        }
+
+        return result.toString();
     }
 }
