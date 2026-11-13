@@ -3,17 +3,28 @@ package com.javarush.caesar.service;
 import java.util.Scanner;
 
 public class Manager {
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
     private final Validator validator = new Validator();
     private final char[] alphabet;
 
-    public Manager(char[] alphabet) {
+    public Manager(Scanner scanner, char[] alphabet) {
+        this.scanner = scanner;
         this.alphabet = alphabet;
     }
 
     public String getOutputFile() {
-        System.out.print("Путь к файлу для результата: ");
-        return scanner.nextLine();
+        String outputFile;
+
+        while (true) {
+            System.out.print("Путь к файлу для результата: ");
+            outputFile = scanner.nextLine();
+            if (validator.isFileExists(outputFile)) {
+                System.out.println("Файл уже существует " + outputFile);
+            } else {
+                break;
+            }
+        }
+        return outputFile;
     }
 
     public int getKey() {

@@ -4,11 +4,14 @@ import com.javarush.caesar.exception.CipherException;
 
 public class BruteForce {
 
-    public String decryptByBruteForce(String encryptedText, char[] alphabet) {
-        /// Перебираем все ключи от 1 до alphabet.length - 1
-        /// для каждого ключа расшифровываем текст и оцениваем, похож ли он на русский:
-        /// большее кол-во пробелов в расшифрованном тексте
-        /// возвращаем вариант с лучшей оценкой
+    /**
+     * Перебираем все ключи от 1 до alphabet.length - 1
+     * для каждого ключа расшифровываем текст и оцениваем, похож ли он на русский:
+     * большее кол-во пробелов в расшифрованном тексте
+     * возвращаем вариант с лучшей оценкой
+     */
+    public String decryptByBruteForce(String encryptedText, char[] alphabet) throws CipherException {
+
 
         Cipher cipher = new Cipher(alphabet);
         int maxAmountOfSpace = 0;
@@ -19,8 +22,8 @@ public class BruteForce {
 
             char[] textArray = cipher.decrypt(encryptedText, i).toCharArray();
 
-            for (int j = 0; j < textArray.length; j++) {
-                if (textArray[i] == ' ') {
+            for (char c : textArray) {
+                if (c == ' ') {
                     spaceCounter++;
                 }
             }
@@ -32,8 +35,9 @@ public class BruteForce {
         }
 
         if (rightKey == -1) {
-            System.out.println("Не смогли расшифровать текст. Извините...");
-            return encryptedText;
+            throw new CipherException("Не смогли расшифровать текст. Извините...");
+        } else {
+            System.out.println("Предположительный ключ - " + rightKey);
         }
 
         return cipher.decrypt(encryptedText, rightKey);

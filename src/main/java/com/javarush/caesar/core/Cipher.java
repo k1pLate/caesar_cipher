@@ -21,84 +21,39 @@ public class Cipher {
         }
     }
 
+    /**
+     * Сдвигаем каждый символ алфавита на shift позиций вперед по кругу
+     * символ, которого нет в алфавите, пропускаем
+     * позицию символа ищем быстрее, чем перебором всего массива
+     * Метод поиска позиции символа
+     */
     public String encrypt(String text, int shift) {
-        /// Сдвигаем каждый символ алфавита на shift позиций вперед по кругу
-        /// символ, которого нет в алфавите, пропускаем
-        /// позицию символа ищем быстрее, чем перебором всего массива
 
-        /// Метод перебора массива
-
-//        char[] charArray = text.toCharArray();
-//
-//        for (int i = 0; i < charArray.length; i++) {
-//            for (int j = 0; j < alphabet.length; j++) {
-//                if (Character.toLowerCase(charArray[i]) == alphabet[j]) {
-//                    char c = alphabet[j + shift];
-//                    if (Character.isUpperCase(charArray[i])) {
-//                        charArray[i] = Character.toUpperCase(c);
-//                    } else {
-//                        charArray[i] = c;
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//
-//        return new String(charArray);
-
-        /// Метод поиска позиции символа
 
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (Character.isUpperCase(text.charAt(i))) {
-                c = Character.toLowerCase(c);
-            }
+            c = Character.toLowerCase(c);
 
             int index = indexes[c];
 
             if (index == -1) {
-                result.append(text.charAt(i));
+                result.append(c);
             } else {
                 int newIndex = (index + shift) % alphabet.length;
-                if (Character.isUpperCase(text.charAt(i))) {
-                    result.append(Character.toUpperCase(alphabet[newIndex]));
-                } else {
-                    result.append(alphabet[newIndex]);
-                }
+                result.append(alphabet[newIndex]);
             }
         }
 
         return result.toString();
     }
 
+    /**
+     * Сдвигаем каждый символ на shift позиций назад по кругу
+     * символ, которого нет в алфавите, - оставляем как есть
+     */
     public String decrypt(String encryptedText, int shift) {
-        /// Сдвигаем каждый символ на shift позиций назад по кругу
-        /// символ, которого нет в алфавите, - оставляем как есть
-
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < encryptedText.length(); i++) {
-            char c = encryptedText.charAt(i);
-            if (Character.isUpperCase(encryptedText.charAt(i))) {
-                c = Character.toLowerCase(c);
-            }
-
-            int index = indexes[c];
-
-            if (index == -1) {
-                result.append(encryptedText.charAt(i));
-            } else {
-                int newIndex = (index - shift + alphabet.length) % alphabet.length;
-                if (Character.isUpperCase(encryptedText.charAt(i))) {
-                    result.append(Character.toUpperCase(alphabet[newIndex]));
-                } else {
-                    result.append(alphabet[newIndex]);
-                }
-            }
-        }
-
-        return result.toString();
+        return encrypt(encryptedText, alphabet.length - shift);
     }
 }

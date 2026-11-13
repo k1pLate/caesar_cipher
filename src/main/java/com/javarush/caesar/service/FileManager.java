@@ -9,24 +9,29 @@ import java.nio.file.Paths;
 
 public class FileManager {
 
+    /**
+     * Читаем файл в кодировке UTF-8 через Path и Files
+     * IOException заворачиваем в CipherException с понятным сообщением
+     */
     public String readFile(String filePath) throws CipherException {
-        /// Читаем файл в кодировке UTF-8 через Path и Files
-        /// IOException заворачиваем в CipherException с понятным сообщением
+
 
         try {
             return Files.readString(Path.of(filePath));
-        }  catch (IOException e) {
-            throw new CipherException("Ошибка! Файл не найден.");
+        } catch (IOException e) {
+            throw new CipherException("Не удалось прочитать файл " + filePath, e);
         }
     }
 
+    /**
+     * Записываем текст в файл, исходный файл не переписываем
+     */
     public void writeFile(String content, String filePath) throws CipherException {
-        /// Записываем текст в файл, исходный файл не переписываем
 
         try {
-            Files.write(Paths.get(filePath), content.getBytes());
+            Files.writeString(Paths.get(filePath), content);
         } catch (IOException e) {
-            throw new CipherException("Ошибка!");
+            throw new CipherException("Не удалось записать файл " + filePath, e);
         }
     }
 }
