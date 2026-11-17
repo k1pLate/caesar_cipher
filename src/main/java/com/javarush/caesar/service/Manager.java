@@ -39,7 +39,7 @@ public class Manager {
                     System.out.println("Неверный ключ! Ключ должен быть от 1 до " + (alphabet.length - 1));
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Ключ должен быть ЧИСЛОМ от 1 до " + (alphabet.length - 1));
+                System.out.println("Ключ должен быть ЧИСЛОМ от 0 до " + (alphabet.length - 1));
             }
         }
         return key;
