@@ -11,13 +11,11 @@ public class BruteForce {
      * возвращаем вариант с лучшей оценкой
      */
     public String decryptByBruteForce(String encryptedText, char[] alphabet) throws CipherException {
-
-
         Cipher cipher = new Cipher(alphabet);
         int maxAmountOfSpace = 0;
         int rightKey = -1;
 
-        for (int i = 1; i <= alphabet.length - 1; i++) {
+        for (int i = 0; i <= alphabet.length - 1; i++) {
             int spaceCounter = 0;
 
             char[] textArray = cipher.decrypt(encryptedText, i).toCharArray();

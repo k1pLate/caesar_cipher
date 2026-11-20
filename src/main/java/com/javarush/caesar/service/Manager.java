@@ -36,7 +36,7 @@ public class Manager {
                 if (validator.isValidKey(key, alphabet)) {
                     break;
                 } else {
-                    System.out.println("Неверный ключ! Ключ должен быть от 1 до " + (alphabet.length - 1));
+                    System.out.println("Неверный ключ! Ключ должен быть от 0 до " + (alphabet.length - 1));
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Ключ должен быть ЧИСЛОМ от 0 до " + (alphabet.length - 1));
