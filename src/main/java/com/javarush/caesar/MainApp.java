@@ -4,7 +4,7 @@ import com.javarush.caesar.core.BruteForce;
 import com.javarush.caesar.core.Cipher;
 import com.javarush.caesar.exception.CipherException;
 import com.javarush.caesar.service.FileManager;
-import com.javarush.caesar.service.Validator;
+import com.javarush.caesar.service.Manager;
 
 import java.util.Scanner;
 
@@ -18,9 +18,9 @@ public class MainApp {
 
     private final Scanner scanner = new Scanner(System.in);
     private final FileManager fileManager = new FileManager();
-    private final Validator validator = new Validator();
     private final Cipher cipher = new Cipher(ALPHABET);
     private final BruteForce bruteForce = new BruteForce();
+    private final Manager manager = new Manager(scanner, ALPHABET);
 
     public static void main(String[] args) {
         new MainApp().run();
@@ -63,23 +63,56 @@ public class MainApp {
         System.out.println("0. Выход (или exit)");
     }
 
+    /**
+     * Запрашиваем исходный файл, файл для результата и ключ
+     * проверяем их через validator, читаем текст через fileManager,
+     * зашифровываем через cipher и записываем результат
+     */
     private void encryptFile() throws CipherException {
-        // TODO спросить исходный файл, файл для результата и ключ
-        //  проверить их через validator, прочитать текст через fileManager,
-        //  зашифровать через cipher и записать результат
-        System.out.println("Режим пока не реализован");
+
+        String inputFile;
+        String outputFile;
+        int key;
+
+        inputFile = manager.getInputFile("Путь к файлу, который надо зашифровать: ");
+        outputFile = manager.getOutputFile();
+        key = manager.getKey();
+
+        String inputText = fileManager.readFile(inputFile);
+        fileManager.writeFile(cipher.encrypt(inputText, key), outputFile);
     }
 
+    /**
+     * То же, что в encryptFile, только расшифровка
+     */
     private void decryptFile() throws CipherException {
-        // TODO то же, что в encryptFile, только расшифровка
-        System.out.println("Режим пока не реализован");
+        String inputFile;
+        String outputFile;
+        int key;
+
+        inputFile = manager.getInputFile("Путь к файлу который надо расшифровать: ");
+        outputFile = manager.getOutputFile();
+        key = manager.getKey();
+
+        String inputText = fileManager.readFile(inputFile);
+        fileManager.writeFile(cipher.decrypt(inputText, key), outputFile);
     }
 
+    /**
+     * Запрашиваем зашифрованный файл и файл для результата,
+     * подбираем ключ через bruteForce и записываем расшифрованный текст
+     */
     private void bruteForceFile() throws CipherException {
-        // TODO спросить зашифрованный файл и файл для результата,
-        //  подобрать ключ через bruteForce и записать расшифрованный текст
-        System.out.println("Режим пока не реализован");
+        String inputFile;
+        String outputFile;
+
+        inputFile = manager.getInputFile("Путь к файлу который надо расшифровать: ");
+        outputFile = manager.getOutputFile();
+
+        String inputText = fileManager.readFile(inputFile);
+        fileManager.writeFile(bruteForce.decryptByBruteForce(inputText, ALPHABET), outputFile);
     }
+
 
     private String ask(String prompt) {
         System.out.print(prompt);
